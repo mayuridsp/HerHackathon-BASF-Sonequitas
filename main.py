@@ -154,8 +154,46 @@ oral_b = ["Glycerin",
           "CI 74160"]
 
 
+sunscreen = ["AVENE THERMAL SPRING WATER (AVENE AQUA)",
+             "C12-15 ALKYL BENZOATE",
+             "DICAPRYLYL CARBONATE",
+             "METHYLENE BIS-BENZOTRIAZOLYL TETRAMETHYLBUTYLPHENOL [NANO]",
+             "WATER (AQUA)",
+             "GLYCERIN",
+             "BIS-ETHYLHEXYLOXYPHENOL METHOXYPHENYL TRIAZINE",
+             "DIETHYLHEXYL BUTAMIDO TRIAZONE",
+             "SILICA",
+             "DIISOPROPYL ADIPATE",
+             "BUTYL METHOXYDIBENZOYLMETHANE",
+             "CETEARYL ISONONANOATE",
+             "LAURYL GLUCOSIDE",
+             "POLYGLYCERYL-2 DIPOLYHYDROXYSTEARATE",
+             "DECYL GLUCOSIDE",
+             "C10-18 TRIGLYCERIDES",
+             "TRIMETHYLPENTANEDIOL/ADIPIC ACID/GLYCERIN CROSSPOLYMER",
+             "ACRYLATES/C10-30 ALKYL ACRYLATE CROSSPOLYMER",
+             "BENZOIC ACID",
+             "BUTYLENE GLYCOL",
+             "CAPRYLIC/CAPRIC TRIGLYCERIDE",
+             "CAPRYLYL GLYCOL",
+             "CITRIC ACID, DISODIUM EDTA",
+             "FRAGRANCE (PARFUM)",
+             "GLYCERYL BEHENATE",
+             "GLYCERYL DIBEHENATE",
+             "OXOTHIAZOLIDINE",
+             "POTASSIUM CETYL PHOSPHATE",
+             "PROPYLENE GLYCOL",
+             "SODIUM BENZOATE",
+             "SODIUM HYDROXIDE",
+             "TOCOPHEROL",
+             "TOCOPHERYL GLUCOSIDE",
+             "TRIBEHENIN",
+             "XANTHAN GUM"]
 
 
+for ing in range(len(sunscreen)):
+    title_ing = sunscreen[ing].title()
+    sunscreen[ing] = title_ing
 
 # print(data)
 # ingredients_list = deod_ingredients.split(",")
@@ -170,11 +208,11 @@ list_basf_products = request_products()
 df = pandas.DataFrame(list_basf_products)
 
 
-matches = list(set(df).intersection(face_cream))
+matches = list(set(df).intersection(sunscreen))
 print("Ingredients in this product that BASF produces:")
 for ing in matches:
     print(ing)
-percentage = int(len(matches) / len(face_cream) * 100)
+percentage = int(len(matches) / len(sunscreen) * 100)
 basf_share = int(percentage * 0.38)
 print(f"The product you're scanning has ca. {percentage}% of products that BASF produces.")
 print(f"This means that you may be buying a product that was {basf_share}% made in BASF.")
