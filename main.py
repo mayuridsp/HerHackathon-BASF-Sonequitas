@@ -4,27 +4,34 @@ import pandas
 
 
 def request_products():
+    """Fetches BASF Products List and respective application."""
     url = "https://www.carecreations.basf.com/sitefinity/Public/Services/Products/ProductService.svc/GetCompactedProducts/"
     request = requests.get(url)
-    products = json.loads(request.content)
+    products_raw_data = json.loads(request.content)
     products_list = []
-    for product in products:
-        products_list.append({product["INCI_Name"]: product["sRelatedApplications"]})
+    for prod in products_raw_data:
+        products_list.append({prod["INCI_Name"]: prod["sRelatedApplications"]})
     return products_list
 
 
-# API_KEY = "x9kp2wln9uw22qzxu76e71jdbdil4d"
-# API_ENDPOINT = "https://api.barcodelookup.com/v3/products"
-# parameters = {
-#     "barcode": "047677371156",
-#     "formatted": "y",
-#     "key": API_KEY
-# }
-#
-# response = requests.get(API_ENDPOINT, params=parameters)
-# response.raise_for_status()
-# data = response.json()
-# ingredients = data.get('products', 'no_products')[0].get('ingredients', 'no_ingredients')
+def request_ingredients(barcode):
+    """Fetches list of ingredients of a scanned product."""
+    api_key = "x9kp2wln9uw22qzxu76e71jdbdil4d"  # Free trial key
+    api_endpoint = "https://api.barcodelookup.com/v3/products"
+    parameters = {
+        "barcode": barcode,
+        "formatted": "y",
+        "key": api_key
+    }
+    response = requests.get(api_endpoint, params=parameters)
+    response.raise_for_status()
+    data = response.json()
+    ingredients = data.get('products', 'no_products')[0].get('ingredients', 'no_ingredients')
+    return ingredients
+
+
+# Current chosen API has few products with filled in ingredients
+# To prove the concept, we created lists of ingredients in example products
 
 deodorant = ["Alcohol Denat.",
              "Butane",
@@ -85,7 +92,6 @@ face_cream = ["Aqua (Water)",
               "Phenoxyethanol",
               "Chlorophenerin"]
 
-
 tide_detergent = ["Sodium Laureth Sulfate",
                   "Sodium Silicoaluminate (Zeolite)",
                   "Sodium C12-15 Alkyl Sulfate",
@@ -94,7 +100,6 @@ tide_detergent = ["Sodium Laureth Sulfate",
 luvs_diaper = ["Petrolatum",
                "Stearyl Alcohol",
                "Aloe Barbadensis Leaf Extract"]
-
 
 always_pads = ["Cellulose",
                "Polyester",
@@ -117,7 +122,6 @@ always_pads = ["Cellulose",
                "Polyoxyalkylene Substituted Chromophore (red)",
                "Fragrance"]
 
-
 pantene = ["Sodium Citrate",
            "Citric Acid",
            "Sodium Citrate",
@@ -130,7 +134,6 @@ pantene = ["Sodium Citrate",
            "Sodium Lauryl Sulfate",
            "Stearyl Alcohol",
            "Panthenol"]
-
 
 oral_b = ["Glycerin",
           "Hydrated Silica",
@@ -152,7 +155,6 @@ oral_b = ["Glycerin",
           "Sodium Fluoride",
           "Limonene",
           "CI 74160"]
-
 
 sunscreen = ["AVENE THERMAL SPRING WATER (AVENE AQUA)",
              "C12-15 ALKYL BENZOATE",
@@ -190,32 +192,45 @@ sunscreen = ["AVENE THERMAL SPRING WATER (AVENE AQUA)",
              "TRIBEHENIN",
              "XANTHAN GUM"]
 
+product_list = [deodorant, face_cream, tide_detergent, luvs_diaper, always_pads, pantene, oral_b, sunscreen]
 
-for ing in range(len(sunscreen)):
-    title_ing = sunscreen[ing].title()
-    sunscreen[ing] = title_ing
-
-# print(data)
-# ingredients_list = deod_ingredients.split(",")
+# Below commented code cleans up ingredients list, in the event that the product is consists of more than one homogeneous part
+# ingredients_list = deodorant.split(",")
 # for i in ingredients_list:
 #     new_i = i.find(":") + 1
-#     # Falta imprimir a lista de ingredientes limpa
 #     print(i[new_i:].strip().replace(".", ""))
 # print(ingredients_list)
 
-
 list_basf_products = request_products()
+# product = request_ingredients(barcode)
 df = pandas.DataFrame(list_basf_products)
 
+chosen_product = int(input("List of products:\n"
+                           "1. Deodorant\n"
+                           "2. Face Cream\n3. "
+                           "3. Tide Detergent\n"
+                           "4. Luvs Diaper\n"
+                           "5. Always Pads\n"
+                           "6. Pantene\n"
+                           "7. Oral_B\n"
+                           "8. Sunscreen\n"
+                           "Please enter the product number you wish to scan: "))
 
-matches = list(set(df).intersection(sunscreen))
-print("Ingredients in this product that BASF produces:")
+product = product_list[chosen_product - 1]
+
+for ing in range(len(product)):
+    title_ing = product[ing].title()
+    product[ing] = title_ing
+
+matches = list(set(df).intersection(product))
+
+print("\nIngredients in this product that BASF produces:")
+
 for ing in matches:
     print(ing)
-percentage = int(len(matches) / len(sunscreen) * 100)
+percentage = int(len(matches) / len(product) * 100)
 basf_share = int(percentage * 0.38)
-print(f"The product you're scanning has ca. {percentage}% of products that BASF produces.")
+
+print(f"The product you're scanning has ca. {percentage}% of ingredients that BASF produces.")
 print(f"This means that you may be buying a product that was {basf_share}% made in BASF.")
 print("Congratulations on choosing a Sustainable and Innovative solution for your daily life!")
-
-# print(matches)
