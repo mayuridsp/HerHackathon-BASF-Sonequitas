@@ -8,7 +8,7 @@ This project earned our team 1st place 🥇 in the BASF competition and 2nd in t
 - Compares with BASF catalogue
 - Returns list of ingredients found that BASF produces
 ![img.png](img.png)
-- ![img_1.png](img_1.png)
+![img_1.png](img_1.png)
 ### Current status
 - The API selected had poor data, returning only a few products with a complete ingredients list
 - For proof of concept, a list of products and respective ingredients was added to the code
