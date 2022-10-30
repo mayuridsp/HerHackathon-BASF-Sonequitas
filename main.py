@@ -1,7 +1,7 @@
 import json
 import requests
 import pandas
-
+import os
 
 def request_products():
     """Fetches BASF Products List and respective application."""
@@ -16,7 +16,7 @@ def request_products():
 
 def request_ingredients(barcode):
     """Fetches list of ingredients of a scanned product."""
-    api_key = "x9kp2wln9uw22qzxu76e71jdbdil4d"  # Free trial key
+    api_key = os.environ.get('API_KEY')  # Free trial key
     api_endpoint = "https://api.barcodelookup.com/v3/products"
     parameters = {
         "barcode": barcode,
@@ -194,7 +194,8 @@ sunscreen = ["AVENE THERMAL SPRING WATER (AVENE AQUA)",
 
 product_list = [deodorant, face_cream, tide_detergent, luvs_diaper, always_pads, pantene, oral_b, sunscreen]
 
-# Below commented code cleans up ingredients list, in the event that the product is consists of more than one homogeneous part
+# Below commented code cleans up ingredients list, in the event that the product is consists of more than one
+# homogeneous part
 # ingredients_list = deodorant.split(",")
 # for i in ingredients_list:
 #     new_i = i.find(":") + 1
